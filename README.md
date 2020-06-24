@@ -1,10 +1,10 @@
 # manw
 
-manw is a very simple and fast command line search engine for Windows API functions. The idea is basically parse MSDN and retrieve useful information about a specific Windows API function. Since it's written in Go the tool is multiplatform.
+manw is a very simple and fast command line search engine for Windows API functions written Go. The idea is basically scrapy MSDN and retrieve useful informations about a specific Windows API function.
 
 ## Why?
 
-On Linux systems we are able to search for the documentation of a function using man command, but what about Windows functions? Open the browser and read the full documentation is the best idea to completely understand a function but sometimes we don't need to do it or simply don't want to.
+On Linux systems we are able to search for the documentation of a function using man command, but what about Windows functions? Open the browser and read the full documentation is the best idea to completely understand a function but sometimes the only thing we need is an overview of it and not the full documentation.
 
 ## **Installation**
 
