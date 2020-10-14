@@ -26,7 +26,7 @@ func check(err error){
 
 func google_search(search_query string) string{
   base_url := "https://www.google.com/search?q="
-  url := base_url + search_query + "msdn"
+  url := base_url + search_query + "+msdn"
 
   var result string
 
