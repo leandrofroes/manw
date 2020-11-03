@@ -1,10 +1,10 @@
 # manw
 
-manw is a very simple and fast command line search engine for Windows API functions written Go. The idea is basically scrapy MSDN and retrieve useful informations about a specific Windows API function.
+manw is a very simple and fast command line search engine for Windows API written Go.
 
 ## Why?
 
-On Linux systems we are able to search for the documentation of a function using man command, but what about Windows functions? Open the browser and read the full documentation is the best idea to completely understand a function but sometimes the only thing we need is an overview of it and not the full documentation.
+On Linux systems we are able to search for the documentation of a function using man command, but what about Windows? Open the browser and read the full documentation is always a good option  but sometimes the only thing we need is a high level overview and not the full documentation.
 
 ## **Installation**
 
@@ -12,54 +12,40 @@ On Linux systems we are able to search for the documentation of a function using
 git clone https://github.com/leandrofroes/manw
 cd manw
 make
+mkdir <your_caching_directory>
 ```
+
+The last step is to add the caching directory path to manw.yml file and then you're good to go!
 
 ## **Usage**
 
 ```
-./manw <function_name>
+NAME
+
+  manw - A multiplatform command line search engine for Windows API.
+  
+SYNOPSIS: 
+
+  ./manw [-a] [-c] [-k] [-t]
+          
+OPTIONS:
+
+  -a, --api string    Search for a Windows API Function/Structure.
+  -c, --cache         Enable caching feature.
+  -k, --kernel string Search for a Windows Kernel Structure.
+  -t, --type string   Search for a Windows Data Type.
 ```
 
 ## **Examples**
 
 ```
-$ ./manw createprocessa
-CreateProcessA function (processthreadsapi.h) - Win32 apps
-
-Creates a new process and its primary thread. The new process runs in the security context of the calling process.
-
-BOOL CreateProcessA(
-  LPCSTR                lpApplicationName,
-  LPSTR                 lpCommandLine,
-  LPSECURITY_ATTRIBUTES lpProcessAttributes,
-  LPSECURITY_ATTRIBUTES lpThreadAttributes,
-  BOOL                  bInheritHandles,
-  DWORD                 dwCreationFlags,
-  LPVOID                lpEnvironment,
-  LPCSTR                lpCurrentDirectory,
-  LPSTARTUPINFOA        lpStartupInfo,
-  LPPROCESS_INFORMATION lpProcessInformation
-);
-
-
-Return value: If the function succeeds, the return value is nonzero. If the function fails, the return value is zero. Note that the function returns before the process has finished initialization. If a required DLL cannot be located or fails to initialize, the process is terminated.
-
-Example code:
-
-        LPTSTR szCmdline = _tcsdup(TEXT("C:\\Program Files\\MyApp -L -S"));
-        CreateProcess(NULL, szCmdline, /* ... */);
-
-Source: https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-createprocessa
-```
-
-```
-$ ./manw createfile
-CreateFileA function (fileapi.h) - Win32 apps
+$ ./manw -a createfilew -c
+CreateFileW function (fileapi.h) - Win32 apps - Kernel32.dll
 
 Creates or opens a file or I/O device. The most commonly used I/O devices are as follows:\_file, file stream, directory, physical disk, volume, console buffer, tape drive, communications resource, mailslot, and pipe.
 
-HANDLE CreateFileA(
-  LPCSTR                lpFileName,
+HANDLE CreateFileW(
+  LPCWSTR               lpFileName,
   DWORD                 dwDesiredAccess,
   DWORD                 dwShareMode,
   LPSECURITY_ATTRIBUTES lpSecurityAttributes,
@@ -69,15 +55,14 @@ HANDLE CreateFileA(
 );
 
 
-Return value: If the function succeeds, the return value is an open handle to the specified file, device, named pipe, or mail slot. If the function fails, the return value is INVALID_HANDLE_VALUE.
+Return value: If the function succeeds, the return value is an open handle to the specified file, device, named pipe, or mail slot. If the function fails, the return value is INVALID_HANDLE_VALUE. 
 
-Source: https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilea
-```
-
-You can search for Windows Structures too:
+Source: https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilew
 
 ```
-$ ./manw peb
+
+```
+$ ./manw -a peb
 PEB (winternl.h) - Win32 apps
 
 Contains process information.
@@ -120,7 +105,45 @@ typedef struct _PEB {
 } PEB;
 
 Source: https://docs.microsoft.com/en-us/windows/win32/api/winternl/ns-winternl-peb
+
 ```
+
+```
+$ ./manw -t callback
+
+Data Type: CALLBACK
+
+The calling convention for callback functions. This type is declared in WinDef.h as follows: #define CALLBACK __stdcall CALLBACK, WINAPI, and APIENTRY are all used to define functions with the __stdcall calling convention. Most functions in the Windows API are declared using WINAPI. You may wish to use CALLBACK for the callback functions that you implement to help identify the function as a callback function.
+
+```
+
+```
+$ ./manw -k _token_control
+//0x28 bytes (sizeof)
+struct _TOKEN_CONTROL
+{
+    struct _LUID TokenId;                                                   //0x0
+    struct _LUID AuthenticationId;                                          //0x8
+    struct _LUID ModifiedId;                                                //0x10
+    struct _TOKEN_SOURCE TokenSource;                                       //0x18
+}; 
+
+Used in_SECURITY_CLIENT_CONTEXT
+
+```
+
+## **Version 1.0**:
+
+* DLL dependencie added to Windows API module.
+* New Command line flags support.
+* New Caching feature for offline usage.
+* New Windows Data Type search module.
+* New Windows Kernel Structure search module.
+* Now the project is modular.
+
+## **Special Thanks**
+
+* [@merces](https://github.com/merces) for the core idea and all the support.
 
 ## **License**
 

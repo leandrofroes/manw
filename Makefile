@@ -4,8 +4,8 @@ GOCMD=go
 
 all: build
 
-build: manw.go 
-	$(GOCMD) build $<
+build: 
+	$(GOCMD) build manw
 
 clean:
 	rm -f manw
