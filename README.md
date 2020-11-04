@@ -12,10 +12,7 @@ On Linux systems we are able to search for the documentation of a function using
 git clone https://github.com/leandrofroes/manw
 cd manw
 make
-mkdir <your_caching_directory>
 ```
-
-The last step is to add the caching directory path to manw.yml file and then you're good to go!
 
 ## **Usage**
 
@@ -26,14 +23,14 @@ NAME
   
 SYNOPSIS: 
 
-  ./manw [-a] [-c] [-k] [-t]
+  ./manw [OPTION]... [STRING]
           
 OPTIONS:
 
-  -a, --api string    Search for a Windows API Function/Structure.
-  -c, --cache         Enable caching feature.
-  -k, --kernel string Search for a Windows Kernel Structure.
-  -t, --type string   Search for a Windows Data Type.
+  -a, --api     string  Search for a Windows API Function/Structure.
+  -c, --cache           Enable caching feature.
+  -k, --kernel  string  Search for a Windows Kernel Structure.
+  -t, --type    string  Search for a Windows Data Type.
 ```
 
 ## **Examples**
@@ -134,12 +131,19 @@ Used in_SECURITY_CLIENT_CONTEXT
 
 ## **Version 1.0**:
 
-* DLL dependencie added to Windows API module.
-* New Command line flags support.
+* DLL dependency added to Windows API module.
+* New Command Line flags support.
 * New Caching feature for offline usage.
 * New Windows Data Type search module.
 * New Windows Kernel Structure search module.
 * Now the project is modular.
+
+## **Version 1.1**:
+
+* Fix v0.1 compatibility. If no parameter is passed manw is going to run the API Search module by default.
+* Remove caching path configuration requirement. Now the caching path is created by manw itself.
+* Now both Kernel Structure and Data Type module supports caching feature.
+* Some other code improvements.
 
 ## **Special Thanks**
 

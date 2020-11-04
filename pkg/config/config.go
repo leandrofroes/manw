@@ -1,36 +1,24 @@
 package config
 
 import (
-	"os"
-	"io/ioutil"
+  "os"
+  "strings"
 
-	"manw/pkg/utils"
-	"gopkg.in/yaml.v2"
+  "manw/pkg/utils"
 )
 
-type Config struct{
-	CacheDir	string	`yaml:"Cache Directory"`
-}
-
 func Load() (cachePath string){
-	configFile := "manw.yml"
+  cacheDir, err := os.UserCacheDir()
+  utils.CheckError(err)
+  cachePath = cacheDir + "/manw/"
 
-	if _, err := os.Stat(configFile); os.IsNotExist(err) {
-		utils.Warning("Unable to find the config file.")
-	}
+  if _, err := os.Stat(cachePath); os.IsNotExist(err) {
+    err := os.Mkdir(cachePath, 0700)
+    utils.CheckError(err)
+  }
 
-	var config Config
-	source, err := ioutil.ReadFile(configFile)
-	utils.CheckError(err)
-	err = yaml.Unmarshal(source, &config)
-	utils.CheckError(err)
+  strings.ReplaceAll(cachePath, ":", "\\:")
+  strings.ReplaceAll(cachePath, "\\", "\\\\")
 
-	cachePath = config.CacheDir
-
-	if _, err := os.Stat(cachePath); os.IsNotExist(err) {
-		err := os.Mkdir(cachePath, 0755)
-		utils.CheckError(err)
-	}
-
-	return cachePath
+  return cachePath
 }

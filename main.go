@@ -6,7 +6,6 @@ import (
 
   "manw/pkg/scrapy"
   "manw/pkg/config"
-  "manw/pkg/cache"
 
   flag "github.com/spf13/pflag"
 )
@@ -15,19 +14,24 @@ func main(){
   usage := `NAME
 
   manw - A multiplatform command line search engine for Windows API.
-  
+
 SYNOPSIS: 
 
-  ./manw [-a] [-c] [-k] [-t]
-          
+  ./manw [OPTION]... [STRING]
+
 OPTIONS:
 
-  -a, --api string    Search for a Windows API Function/Structure.
-  -c, --cache         Enable caching feature.
-  -k, --kernel string Search for a Windows Kernel Structure.
-  -t, --type string   Search for a Windows Data Type.
+  -a, --api     string  Search for a Windows API Function/Structure.
+  -c, --cache           Enable caching feature.
+  -k, --kernel  string  Search for a Windows Kernel Structure.
+  -t, --type    string  Search for a Windows Data Type.
 
-`
+  `
+
+  if(len(os.Args) < 2){
+    fmt.Fprintf(os.Stderr, usage)
+    os.Exit(1)
+  }
 
   flag.Usage = func(){
     fmt.Fprintf(os.Stderr, usage)
@@ -37,31 +41,26 @@ OPTIONS:
   cachePath := config.Load()
 
   apiFlag := flag.StringP("api", "a", "", "Search for a Windows API Function/Structure.")
-  cacheFlag := flag.BoolP("cache", "c", false, "Enable caching feature.")
+  cache := flag.BoolP("cache", "c", false, "Enable caching feature.")
   dataTypeFlag := flag.StringP("type", "t", "", "Search for a Windows Data Type.")
   kernelFlag := flag.StringP("kernel", "k", "", "Search for a Windows Kernel Structure.")
 
   flag.Parse()
 
   apiSearch := *apiFlag
-  cacheEnabled := *cacheFlag
+  cacheFlag := *cache
   dataTypeSearch := *dataTypeFlag
   kernelSearch := *kernelFlag
 
   switch {
-    case cacheEnabled && apiSearch != "":
-      if(!cache.CheckCache(apiSearch, cachePath)){
-        cache.RunCacheScraper(apiSearch, cachePath)
-      }
-    case apiSearch != "":
-      scrapy.RunScraper(apiSearch, "api")
-    case dataTypeSearch != "":
-      scrapy.RunScraper(dataTypeSearch, "type")
-    case kernelSearch != "":
-      scrapy.RunScraper(kernelSearch, "kernel")
-    default:
-      fmt.Fprintf(os.Stderr, usage)
-      os.Exit(1)
+  case apiSearch != "":
+    scrapy.RunAPIScraper(apiSearch, cachePath, cacheFlag)
+  case dataTypeSearch != "":
+    scrapy.RunTypeScraper(dataTypeSearch, cachePath, cacheFlag)
+  case kernelSearch != "":
+    scrapy.RunKernelScraper(kernelSearch, cachePath, cacheFlag)
+  default:
+    scrapy.RunAPIScraper(os.Args[1], cachePath, cacheFlag)
   }
 
 }

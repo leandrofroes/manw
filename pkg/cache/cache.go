@@ -1,66 +1,76 @@
 package cache
 
 import (
-	"os"
-	"fmt"
-	"strings"
-	"io/ioutil"
+  "os"
+  "strings"
+  "io/ioutil"
 
-	"manw/pkg/utils"
-	"manw/pkg/scrapy"
+  "manw/pkg/utils"
 )
 
-func printCache(entry string){
-	data, err := ioutil.ReadFile(entry)
-	utils.CheckError(err)
-	fmt.Print(string(data))
-}
+func addAPICache(search, cachePath string, api *utils.API) (entry string){
+  entry = strings.ToLower(cachePath + search)
 
-func addCacheEntry(funcName, path string) (entry string){
-	entry = strings.ToLower(path + "/" + funcName)
+  f, err := os.Create(entry)
+  utils.CheckError(err)
 
-	url := scrapy.GoogleSearch(funcName, "api")
-	api := scrapy.ParseMSDNAPI(url)
+  f.WriteString(api.Title + " - " + api.DLL + "\n\n")
+  f.WriteString(api.Description + "\n\n")
+  f.WriteString(api.Code + "\n\n")
 
-	f, err := os.Create(entry)
-	utils.CheckError(err)
-  
-	f.WriteString(api.Title + " - " + api.DLL + "\n\n")
-	f.WriteString(api.Description + "\n\n")
-	f.WriteString(api.Code + "\n\n")
-  
-	if api.Return != ""{
-	  f.WriteString("Return value: " + api.Return + "\n\n")
-	}
-  
-	if api.ExampleCode != ""{
-	  f.WriteString("Example code:\n\n" + api.ExampleCode + "\n\n")
-	}
-  
-	f.WriteString("Source: " + api.Source + "\n\n")
-
-	return entry
+  if api.Return != ""{
+    f.WriteString("Return value: " + api.Return + "\n\n")
   }
-  
-func CheckCache(funcName, path string) (flag bool){
-	files, err := ioutil.ReadDir(path)
-	utils.CheckError(err)
 
-	flag = false
+  if api.ExampleCode != ""{
+    f.WriteString("Example code:\n\n" + api.ExampleCode + "\n\n")
+  }
 
-	for _, f := range files {
-		if f.Name() == funcName{
-		flag := true
-		entry := path + "/" + funcName
-		printCache(entry)
-		return flag
-		}
-	}
+  f.WriteString("Source: " + api.Source + "\n\n")
 
-	return flag
+  return entry
 }
 
-func RunCacheScraper(search, cachePath string){
-	entry := addCacheEntry(search, cachePath)
-	printCache(entry)
+func addGenericCache(search, data, cachePath string) (entry string){
+  entry = strings.ToLower(cachePath + search)
+
+  f, err := os.Create(entry)
+  utils.CheckError(err)
+
+  f.WriteString(data)
+
+  return entry
+}
+
+func CheckCache(search, cachePath string) (flag bool){
+  files, err := ioutil.ReadDir(cachePath)
+  utils.CheckError(err)
+
+  flag = false
+
+  for _, f := range files {
+    if f.Name() == search{
+      flag := true
+      entry := cachePath + search
+      utils.GenericFilePrint(entry)
+      return flag
+    }
+  }
+
+  return flag
+}
+
+func RunAPICache(search, cachePath string, api *utils.API){
+  entry := addAPICache(search, cachePath, api)
+  utils.GenericFilePrint(entry)
+}
+
+func RunTypeCache(search, dataTypeInfo, cachePath string){
+  entry := addGenericCache(search, dataTypeInfo, cachePath)
+  utils.GenericFilePrint(entry)
+}
+
+func RunKernelCache(search, kernelInfo, cachePath string){
+  entry := addGenericCache(search, kernelInfo, cachePath)
+  utils.GenericFilePrint(entry)
 }
