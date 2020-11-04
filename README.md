@@ -1,6 +1,6 @@
 # manw
 
-manw is a very simple and fast command line search engine for Windows API written Go.
+manw is a very simple and fast command line search engine for Windows API written in Go.
 
 ## Why?
 
