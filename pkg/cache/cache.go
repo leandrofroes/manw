@@ -49,7 +49,7 @@ func CheckCache(search, cachePath string) (flag bool){
   flag = false
 
   for _, f := range files {
-    if f.Name() == search{
+    if f.Name() == strings.ToLower(search){
       flag := true
       entry := cachePath + search
       utils.GenericFilePrint(entry)
