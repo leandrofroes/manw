@@ -1,6 +1,6 @@
 # manw
 
-manw is a very simple and fast command line search engine for Windows API written in Go.
+manw is a very simple and fast command line search engine for Windows OS info written in Go.
 
 ## Why?
 
@@ -144,6 +144,11 @@ Used in_SECURITY_CLIENT_CONTEXT
 * Remove caching path configuration requirement. Now the caching path is created by manw itself.
 * Now both Kernel Structure and Data Type module supports caching feature.
 * Some other code improvements.
+
+## **Version 1.2**:
+
+* General bug fix
+* Now the cache directory is created only if you specify the -c flag
 
 ## **Special Thanks**
 

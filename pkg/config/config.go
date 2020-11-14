@@ -13,7 +13,7 @@ func Load() (cachePath string){
   cachePath = cacheDir + "/manw/"
 
   if _, err := os.Stat(cachePath); os.IsNotExist(err) {
-    err := os.Mkdir(cachePath, 0700)
+    err := os.MkdirAll(cachePath, 0700)
     utils.CheckError(err)
   }
 

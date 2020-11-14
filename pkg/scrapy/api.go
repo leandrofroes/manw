@@ -139,7 +139,7 @@ func RunAPIScraper(search, cachePath string, cacheFlag bool){
       cache.RunAPICache(search, cachePath, api)
     }
   }else{
-    url := googleTypeSearch(search)
+    url := googleAPISearch(search)
 
     if url == ""{
       utils.Warning("Unable to find the provided Windows resource.")

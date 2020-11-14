@@ -13,7 +13,7 @@ import (
 func main(){
   usage := `NAME
 
-  manw - A multiplatform command line search engine for Windows API.
+  manw - A multiplatform command line search engine for Windows OS info.
 
 SYNOPSIS: 
 
@@ -26,9 +26,9 @@ OPTIONS:
   -k, --kernel  string  Search for a Windows Kernel Structure.
   -t, --type    string  Search for a Windows Data Type.
 
-  `
+`
 
-  if(len(os.Args) < 2){
+  if(len(os.Args) < 3){
     fmt.Fprintf(os.Stderr, usage)
     os.Exit(1)
   }
@@ -37,8 +37,6 @@ OPTIONS:
     fmt.Fprintf(os.Stderr, usage)
     os.Exit(1)
   }
-
-  cachePath := config.Load()
 
   apiFlag := flag.StringP("api", "a", "", "Search for a Windows API Function/Structure.")
   cache := flag.BoolP("cache", "c", false, "Enable caching feature.")
@@ -52,15 +50,21 @@ OPTIONS:
   dataTypeSearch := *dataTypeFlag
   kernelSearch := *kernelFlag
 
+  var cachePath string
+
+  if(cacheFlag){
+    cachePath = config.Load()
+  }
+
   switch {
-  case apiSearch != "":
-    scrapy.RunAPIScraper(apiSearch, cachePath, cacheFlag)
-  case dataTypeSearch != "":
-    scrapy.RunTypeScraper(dataTypeSearch, cachePath, cacheFlag)
-  case kernelSearch != "":
-    scrapy.RunKernelScraper(kernelSearch, cachePath, cacheFlag)
-  default:
-    scrapy.RunAPIScraper(os.Args[1], cachePath, cacheFlag)
+    case apiSearch != "":
+      scrapy.RunAPIScraper(apiSearch, cachePath, cacheFlag)
+    case dataTypeSearch != "":
+      scrapy.RunTypeScraper(dataTypeSearch, cachePath, cacheFlag)
+    case kernelSearch != "":
+      scrapy.RunKernelScraper(kernelSearch, cachePath, cacheFlag)
+    default:
+      scrapy.RunAPIScraper(os.Args[1], cachePath, cacheFlag)
   }
 
 }
