@@ -19,7 +19,7 @@ make
 ```
 NAME
 
-  manw - A multiplatform command line search engine for Windows API.
+  manw - A multiplatform command line search engine for Windows OS info.
   
 SYNOPSIS: 
 
