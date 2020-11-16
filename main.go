@@ -28,7 +28,7 @@ OPTIONS:
 
 `
 
-  if(len(os.Args) < 3){
+  if(len(os.Args) < 2){
     fmt.Fprintf(os.Stderr, usage)
     os.Exit(1)
   }
