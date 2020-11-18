@@ -1,7 +1,6 @@
 package scrapy
 
 import (
-  "fmt"
   "log"
   "regexp"
   "strings"
@@ -11,9 +10,9 @@ import (
   "github.com/gocolly/colly"
 )
 
-func googleAPISearch(s string) string{
+func googleFunctionSearch(s string) string{
   baseUrl := "https://www.google.com/search?q="
-  url := baseUrl + s + "+msdn"
+  url := baseUrl + s + "+function+msdn"
 
   var result string
 
@@ -48,7 +47,7 @@ func googleAPISearch(s string) string{
   return result
 }
 
-func ParseMSDNAPI(url string) *utils.API{
+func ParseMSDNFunction(url string) *utils.API{
   api := utils.API{}
 
   collector := colly.NewCollector(
@@ -80,11 +79,11 @@ func ParseMSDNAPI(url string) *utils.API{
 
   collector.OnHTML("pre", func(e *colly.HTMLElement){
     if e.Index == 0 {
-      api.Code = e.Text
+      api.CodeA = e.Text
       return
     }
     if e.Index == 1{
-      api.ExampleCode = e.Text
+      api.CodeB = e.Text
       return
     }
   })
@@ -109,44 +108,16 @@ func ParseMSDNAPI(url string) *utils.API{
   return &api
 }
 
-func printMSDNAPINoCache(api *utils.API){
-  fmt.Printf("%s - %s\n\n", api.Title, api.DLL)
-  fmt.Printf("%s\n\n", api.Description)
-  fmt.Printf("%s\n\n", api.Code)
-
-  if api.Return != ""{
-    fmt.Printf("Return value: %s\n\n", api.Return)
-  }
-
-  if api.ExampleCode != ""{
-    fmt.Printf("Example code:\n\n%s\n\n", api.ExampleCode)
-  }
-
-  fmt.Printf("Source: %s\n\n", api.Source)
-}
-
-func RunAPIScraper(search, cachePath string, cacheFlag bool){
-  if(cacheFlag){
-    if(!cache.CheckCache(search, cachePath)){
-      url := googleAPISearch(search)
-
-      if url == ""{
-        utils.Warning("Unable to find the provided Windows resource.")
-      }
-
-      api := ParseMSDNAPI(url)
-
-      cache.RunAPICache(search, cachePath, api)
-    }
-  }else{
-    url := googleAPISearch(search)
+func RunFunctionScraper(search, cachePath string){
+  if(!cache.CheckCache(search, cachePath)){
+    url := googleFunctionSearch(search)
 
     if url == ""{
-      utils.Warning("Unable to find the provided Windows resource.")
+      utils.Warning("Unable to find this Windows function.")
     }
 
-    api := ParseMSDNAPI(url)
+    api := ParseMSDNFunction(url)
 
-    printMSDNAPINoCache(api)
+    cache.RunFunctionCache(search, cachePath, api)
   }
 }

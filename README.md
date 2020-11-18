@@ -14,6 +14,8 @@ cd manw
 make
 ```
 
+Make sure you cleaned up your old cache data before you use a newer manw version.
+
 ## **Usage**
 
 ```
@@ -23,20 +25,21 @@ NAME
   
 SYNOPSIS: 
 
-  ./manw [OPTION]... [STRING]
+  ./manw [OPTION] [STRING]
           
 OPTIONS:
 
-  -a, --api     string  Search for a Windows API Function/Structure.
-  -c, --cache           Enable caching feature.
-  -k, --kernel  string  Search for a Windows Kernel Structure.
-  -t, --type    string  Search for a Windows Data Type.
+  -f, --function  string  Search for a Windows API Function.
+  -s, --structure string  Search for a Windows API Structure.    
+  -k, --kernel    string  Search for a Windows Kernel Structure.
+  -t, --type      string  Search for a Windows Data Type.
+
 ```
 
 ## **Examples**
 
 ```
-$ ./manw -a createfilew -c
+$ ./manw -f createfilew
 CreateFileW function (fileapi.h) - Win32 apps - Kernel32.dll
 
 Creates or opens a file or I/O device. The most commonly used I/O devices are as follows:\_file, file stream, directory, physical disk, volume, console buffer, tape drive, communications resource, mailslot, and pipe.
@@ -59,7 +62,7 @@ Source: https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-cr
 ```
 
 ```
-$ ./manw -a peb
+$ ./manw -s peb
 PEB (winternl.h) - Win32 apps
 
 Contains process information.
@@ -85,9 +88,6 @@ typedef struct _PEB {
   PVOID                         Reserved12[1];
   ULONG                         SessionId;
 } PEB, *PPEB;
-
-
-Example code:
 
 typedef struct _PEB {
     BYTE Reserved1[2];
@@ -149,6 +149,14 @@ Used in_SECURITY_CLIENT_CONTEXT
 
 * General bug fix
 * Now the cache directory is created only if you specify the -c flag
+
+## **Version 1.3**:
+
+* Now the cache feature is enabled by default and -c flag was removed.
+* New -s flag for Windows API Structure search.
+* -a renamed to -f.
+* Fix flag number checking in order to allow only a single flag usage.
+* General code updates.
 
 ## **Special Thanks**
 

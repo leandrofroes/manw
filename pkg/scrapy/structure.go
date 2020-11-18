@@ -1,6 +1,6 @@
 package scrapy
 
-import(
+import (
   "log"
   "regexp"
   "strings"
@@ -10,9 +10,9 @@ import(
   "github.com/gocolly/colly"
 )
 
-func googleTypeSearch(s string) string{
+func googleStructureSearch(s string) string{
   baseUrl := "https://www.google.com/search?q="
-  url := baseUrl + s + "+windows+data+type+msdn"
+  url := baseUrl + s + "+structure+msdn"
 
   var result string
 
@@ -47,28 +47,52 @@ func googleTypeSearch(s string) string{
   return result
 }
 
-func parseMSDNDataType(s, url string) string{
-  var dataTypeInfo string
+func ParseMSDNStructure(url string) *utils.API{
+  api := utils.API{}
+
   collector := colly.NewCollector(
     colly.AllowedDomains("docs.microsoft.com"),
     colly.UserAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0"),
   )
 
-  collector.OnHTML("tr", func(e *colly.HTMLElement){
-    str := strings.ToUpper(s) + "\n"
-    re, err := regexp.Compile(str)
+  collector.OnHTML("meta", func(e *colly.HTMLElement){
+    if e.Attr("property") == "og:title"{
+      api.Title = e.Attr("content")
+      return
+    }
+    if e.Attr("property") == "og:description"{
+      api.Description = e.Attr("content")
+      return
+    }
+    if e.Attr("property") == "og:url"{
+      api.Source = e.Attr("content")
+      return
+    }
+  })
+
+  collector.OnHTML("pre", func(e *colly.HTMLElement){
+    if e.Index == 0 {
+      api.CodeA = e.Text
+      return
+    }
+    if e.Index == 1 {
+      api.CodeB = e.Text
+      return
+    }
+    if e.Index == 2 {
+      api.CodeC = e.Text
+      return
+    }
+  })
+
+  collector.OnHTML("p", func(e *colly.HTMLElement){
+    re, err := regexp.Compile(".*(no error occurs|succeeds|fails|failure|returns|return value|returned).*(no error occurs|succeeds|fails|failure|returns|return value|returned)[^.]+")
     utils.CheckError(err)
     match := re.FindString(e.Text)
-    index := strings.Index(e.Text, str)
 
-    if match != "" && index == 1{
-      strSlice := strings.Split(e.Text, "\n")
-      dataTypeInfo += "\nData Type: "
-      for i, str := range strSlice{
-        if(i > 0 && i < len(strSlice) -1){
-          dataTypeInfo += str + "\n\n"
-        }
-      }
+    if match != ""{
+      api.Return += match + ". "
+      api.Return = strings.ReplaceAll(api.Return, "\n", " ",)
     }
   })
 
@@ -78,19 +102,19 @@ func parseMSDNDataType(s, url string) string{
 
   collector.Visit(url)
 
-  return dataTypeInfo
+  return &api
 }
 
-func RunTypeScraper(search, cachePath string){
+func RunStructureScraper(search, cachePath string){
   if(!cache.CheckCache(search, cachePath)){
-    url := googleTypeSearch(search)
+    url := googleStructureSearch(search)
 
     if url == ""{
-      utils.Warning("Unable to find this Windows data type.")
+      utils.Warning("Unable to find this Windows structure.")
     }
 
-    dataTypeInfo := parseMSDNDataType(search, url)
+    api := ParseMSDNStructure(url)
 
-    cache.RunTypeCache(search, dataTypeInfo, cachePath)
+    cache.RunStructureCache(search, cachePath, api)
   }
 }

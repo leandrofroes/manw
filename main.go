@@ -17,54 +17,53 @@ func main(){
 
 SYNOPSIS: 
 
-  ./manw [OPTION]... [STRING]
+  ./manw [OPTION] [STRING]
 
 OPTIONS:
 
-  -a, --api     string  Search for a Windows API Function/Structure.
-  -c, --cache           Enable caching feature.
-  -k, --kernel  string  Search for a Windows Kernel Structure.
-  -t, --type    string  Search for a Windows Data Type.
+  -f, --function  string  Search for a Windows API Function.
+  -s, --structure string  Search for a Windows API Structure.    
+  -k, --kernel    string  Search for a Windows Kernel Structure.
+  -t, --type      string  Search for a Windows Data Type.
 
 `
-
-  if(len(os.Args) < 2){
-    fmt.Fprintf(os.Stderr, usage)
-    os.Exit(1)
-  }
 
   flag.Usage = func(){
     fmt.Fprintf(os.Stderr, usage)
     os.Exit(1)
   }
 
-  apiFlag := flag.StringP("api", "a", "", "Search for a Windows API Function/Structure.")
-  cache := flag.BoolP("cache", "c", false, "Enable caching feature.")
-  dataTypeFlag := flag.StringP("type", "t", "", "Search for a Windows Data Type.")
-  kernelFlag := flag.StringP("kernel", "k", "", "Search for a Windows Kernel Structure.")
+  var (
+    functionSearch  string
+    structureSearch string
+    dataTypeSearch  string
+    kernelSearch    string
+  )
+
+  flag.StringVarP(&functionSearch, "function", "f", "", "Search for a Windows API Function.")
+  flag.StringVarP(&structureSearch, "structure", "s", "", "Search for a Windows API Structure.")
+  flag.StringVarP(&dataTypeSearch, "type", "t", "", "Search for a Windows Data Type.")
+  flag.StringVarP(&kernelSearch, "kernel", "k", "", "Search for a Windows Kernel Structure.")
 
   flag.Parse()
 
-  apiSearch := *apiFlag
-  cacheFlag := *cache
-  dataTypeSearch := *dataTypeFlag
-  kernelSearch := *kernelFlag
-
-  var cachePath string
-
-  if(cacheFlag){
-    cachePath = config.Load()
+  if(len(os.Args) < 2 || flag.NFlag() >= 2){
+    fmt.Fprintf(os.Stderr, usage)
+    os.Exit(1)
   }
 
-  switch {
-    case apiSearch != "":
-      scrapy.RunAPIScraper(apiSearch, cachePath, cacheFlag)
+  cachePath := config.Load()
+
+  switch{
+    case functionSearch != "":
+      scrapy.RunFunctionScraper(functionSearch, cachePath)
+    case structureSearch != "":
+      scrapy.RunStructureScraper(structureSearch, cachePath)
     case dataTypeSearch != "":
-      scrapy.RunTypeScraper(dataTypeSearch, cachePath, cacheFlag)
+      scrapy.RunTypeScraper(dataTypeSearch, cachePath)
     case kernelSearch != "":
-      scrapy.RunKernelScraper(kernelSearch, cachePath, cacheFlag)
+      scrapy.RunKernelScraper(kernelSearch, cachePath)
     default:
-      scrapy.RunAPIScraper(os.Args[1], cachePath, cacheFlag)
+      scrapy.RunFunctionScraper(os.Args[1], cachePath)
   }
-
 }

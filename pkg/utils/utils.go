@@ -9,9 +9,10 @@ import (
 type API struct {
   Title       string
   Description string
-  Code        string
+  CodeA       string
+  CodeB       string
+  CodeC       string
   Return      string
-  ExampleCode string
   Source      string
   DLL         string
 }

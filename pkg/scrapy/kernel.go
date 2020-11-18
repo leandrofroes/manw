@@ -76,28 +76,16 @@ func parseKernelInfo(url string) string{
   return kernelInfo
 }
 
-func RunKernelScraper(search, cachePath string, cacheFlag bool){
-  if(cacheFlag){
-    if(!cache.CheckCache(search, cachePath)){
-      url := googleKernelSearch(search)
-
-      if url == ""{
-        utils.Warning("Unable to find the provided Windows resource.")
-      }
-
-      kernelInfo := parseKernelInfo(url)
-
-      cache.RunKernelCache(search, kernelInfo, cachePath)
-    }
-  }else{
+func RunKernelScraper(search, cachePath string){
+  if(!cache.CheckCache(search, cachePath)){
     url := googleKernelSearch(search)
 
     if url == ""{
-      utils.Warning("Unable to find the provided Windows resource.")
+      utils.Warning("Unable to find this Windows Kernel structure.")
     }
 
     kernelInfo := parseKernelInfo(url)
 
-    utils.GenericPrint(kernelInfo)
+    cache.RunKernelCache(search, kernelInfo, cachePath)
   }
 }

@@ -8,28 +8,53 @@ import (
   "manw/pkg/utils"
 )
 
-func addAPICache(search, cachePath string, api *utils.API) (entry string){
+func addFunctionCache(search, cachePath string, api *utils.API) (entry string){
   entry = strings.ToLower(cachePath + search)
 
   f, err := os.Create(entry)
   utils.CheckError(err)
 
-  f.WriteString(api.Title + " - " + api.DLL + "\n\n")
+  f.WriteString(api.Title + "\n\n")
+  f.WriteString("Exported by: " + api.DLL + "\n\n")
   f.WriteString(api.Description + "\n\n")
-  f.WriteString(api.Code + "\n\n")
+  f.WriteString(api.CodeA + "\n")
 
   if api.Return != ""{
     f.WriteString("Return value: " + api.Return + "\n\n")
   }
 
-  if api.ExampleCode != ""{
-    f.WriteString("Example code:\n\n" + api.ExampleCode + "\n\n")
+  if api.CodeB != ""{
+    f.WriteString("Example code:\n\n" + api.CodeB + "\n\n")
   }
 
   f.WriteString("Source: " + api.Source + "\n\n")
 
   return entry
 }
+
+func addStructureCache(search, cachePath string, api *utils.API) (entry string){
+  entry = strings.ToLower(cachePath + search)
+
+  f, err := os.Create(entry)
+  utils.CheckError(err)
+
+  f.WriteString(api.Title + "\n\n")
+  f.WriteString(api.Description + "\n\n")
+  f.WriteString(api.CodeA + "\n")
+
+  if api.CodeB != ""{
+    f.WriteString(api.CodeB + "\n\n")
+  }
+
+  if api.CodeC != ""{
+    f.WriteString(api.CodeC + "\n")
+  }
+
+  f.WriteString("Source: " + api.Source + "\n\n")
+
+  return entry
+}
+
 
 func addGenericCache(search, data, cachePath string) (entry string){
   entry = strings.ToLower(cachePath + search)
@@ -41,6 +66,8 @@ func addGenericCache(search, data, cachePath string) (entry string){
 
   return entry
 }
+
+
 
 func CheckCache(search, cachePath string) (flag bool){
   files, err := ioutil.ReadDir(cachePath)
@@ -60,8 +87,13 @@ func CheckCache(search, cachePath string) (flag bool){
   return flag
 }
 
-func RunAPICache(search, cachePath string, api *utils.API){
-  entry := addAPICache(search, cachePath, api)
+func RunFunctionCache(search, cachePath string, api *utils.API){
+  entry := addFunctionCache(search, cachePath, api)
+  utils.GenericFilePrint(entry)
+}
+
+func RunStructureCache(search, cachePath string, api *utils.API){
+  entry := addStructureCache(search, cachePath, api)
   utils.GenericFilePrint(entry)
 }
 
