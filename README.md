@@ -14,8 +14,6 @@ cd manw
 make
 ```
 
-Make sure you cleaned up your old cache data before you use a newer manw version.
-
 ## **Usage**
 
 ```
