@@ -25,7 +25,6 @@ OPTIONS:
   -s, --structure string  Search for a Windows API Structure.    
   -k, --kernel    string  Search for a Windows Kernel Structure.
   -t, --type      string  Search for a Windows Data Type.
-
 `
 
   flag.Usage = func(){
