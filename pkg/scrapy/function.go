@@ -87,7 +87,7 @@ func RunFunctionScraper(search, cachePath string){
       cache.RunFunctionCache(search, cachePath, api)
     } 
   } else {
-    searchAux := "+function+msdn"
+    searchAux := "+api+function+msdn"
 
     url := GoogleMSDNSearch(search, searchAux)
   
