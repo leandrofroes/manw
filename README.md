@@ -25,7 +25,7 @@ NAME
   
 SYNOPSIS: 
 
-  ./manw [OPTION] [STRING]
+  ./manw [OPTION...] [STRING]
           
 OPTIONS:
 
@@ -33,32 +33,40 @@ OPTIONS:
   -s, --structure string  Search for a Windows API Structure.    
   -k, --kernel    string  Search for a Windows Kernel Structure.
   -t, --type      string  Search for a Windows Data Type.
-
+  -c, --cache     bool    Enable cache feature.
 ```
 
 ## **Examples**
 
 ```
-$ ./manw -f createfilew
-CreateFileW function (fileapi.h) - Win32 apps - Kernel32.dll
+$ ./manw -f createprocess
+CreateProcessA function (processthreadsapi.h) - Win32 apps
 
-Creates or opens a file or I/O device. The most commonly used I/O devices are as follows:\_file, file stream, directory, physical disk, volume, console buffer, tape drive, communications resource, mailslot, and pipe.
+Exported by: Kernel32.dll
 
-HANDLE CreateFileW(
-  LPCWSTR               lpFileName,
-  DWORD                 dwDesiredAccess,
-  DWORD                 dwShareMode,
-  LPSECURITY_ATTRIBUTES lpSecurityAttributes,
-  DWORD                 dwCreationDisposition,
-  DWORD                 dwFlagsAndAttributes,
-  HANDLE                hTemplateFile
+Creates a new process and its primary thread. The new process runs in the security context of the calling process.
+
+BOOL CreateProcessA(
+  LPCSTR                lpApplicationName,
+  LPSTR                 lpCommandLine,
+  LPSECURITY_ATTRIBUTES lpProcessAttributes,
+  LPSECURITY_ATTRIBUTES lpThreadAttributes,
+  BOOL                  bInheritHandles,
+  DWORD                 dwCreationFlags,
+  LPVOID                lpEnvironment,
+  LPCSTR                lpCurrentDirectory,
+  LPSTARTUPINFOA        lpStartupInfo,
+  LPPROCESS_INFORMATION lpProcessInformation
 );
 
+Return value: If the function succeeds, the return value is nonzero. If the function fails, the return value is zero. Note that the function returns before the process has finished initialization. If a required DLL cannot be located or fails to initialize, the process is terminated. 
 
-Return value: If the function succeeds, the return value is an open handle to the specified file, device, named pipe, or mail slot. If the function fails, the return value is INVALID_HANDLE_VALUE. 
+Example code:
 
-Source: https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilew
+	LPTSTR szCmdline = _tcsdup(TEXT("C:\\Program Files\\MyApp -L -S"));
+	CreateProcess(NULL, szCmdline, /* ... */);
 
+Source: https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-createprocessa
 ```
 
 ```

@@ -45,16 +45,31 @@ func parseMSDNDataType(s, url string) string{
 }
 
 func RunTypeScraper(search, cachePath string){
-  if(!cache.CheckCache(search, cachePath)){
-  searchAux := "+windows+data+type+msdn"
-    url := GoogleMSDNSearch(search, searchAux)
+  if(cachePath != ""){
+    if(!cache.CheckCache(search, cachePath)){
+      searchAux := "+windows+data+type+msdn"
 
+      url := GoogleMSDNSearch(search, searchAux)
+    
+      if url == ""{
+        utils.Warning("Unable to find this Windows data type.")
+      }
+    
+      dataTypeInfo := parseMSDNDataType(search, url)
+
+      cache.RunTypeCache(search, dataTypeInfo, cachePath)
+    }
+  } else {
+    searchAux := "+windows+data+type+msdn"
+
+    url := GoogleMSDNSearch(search, searchAux)
+  
     if url == ""{
       utils.Warning("Unable to find this Windows data type.")
     }
-
+  
     dataTypeInfo := parseMSDNDataType(search, url)
-
-    cache.RunTypeCache(search, dataTypeInfo, cachePath)
+    
+    utils.GenericPrint(dataTypeInfo)
   }
 }

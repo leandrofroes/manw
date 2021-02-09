@@ -55,7 +55,6 @@ func addStructureCache(search, cachePath string, api *utils.API) (entry string){
   return entry
 }
 
-
 func addGenericCache(search, data, cachePath string) (entry string){
   entry = strings.ToLower(cachePath + search)
 
@@ -66,8 +65,6 @@ func addGenericCache(search, data, cachePath string) (entry string){
 
   return entry
 }
-
-
 
 func CheckCache(search, cachePath string) (flag bool){
   files, err := ioutil.ReadDir(cachePath)

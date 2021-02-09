@@ -72,16 +72,31 @@ func ParseMSDNFunction(url string) *utils.API{
 }
 
 func RunFunctionScraper(search, cachePath string){
-  if(!cache.CheckCache(search, cachePath)){
+  if(cachePath != ""){
+    if(!cache.CheckCache(search, cachePath)){
+      searchAux := "+function+msdn"
+    
+      url := GoogleMSDNSearch(search, searchAux)
+    
+      if url == ""{
+        utils.Warning("Unable to find this Windows function.")
+      }
+    
+      api := ParseMSDNFunction(url)
+      
+      cache.RunFunctionCache(search, cachePath, api)
+    } 
+  } else {
     searchAux := "+function+msdn"
-    url := GoogleMSDNSearch(search, searchAux)
 
+    url := GoogleMSDNSearch(search, searchAux)
+  
     if url == ""{
       utils.Warning("Unable to find this Windows function.")
     }
-
+  
     api := ParseMSDNFunction(url)
 
-    cache.RunFunctionCache(search, cachePath, api)
+    utils.PrintMSDNFunc(api)
   }
 }

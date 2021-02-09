@@ -33,16 +33,31 @@ func parseKernelInfo(url string) string{
 }
 
 func RunKernelScraper(search, cachePath string){
-  if(!cache.CheckCache(search, cachePath)){
-  searchAux := "+windows+kernel+vergilius+project"
-    url := GoogleKernelSearch(search, searchAux)
+  if(cachePath != ""){
+    if(!cache.CheckCache(search, cachePath)){
+      searchAux := "+windows+kernel+vergilius+project"
 
+      url := GoogleKernelSearch(search, searchAux)
+    
+      if url == ""{
+        utils.Warning("Unable to find this Windows Kernel structure.")
+      }
+    
+      kernelInfo := parseKernelInfo(url)
+      
+      cache.RunKernelCache(search, kernelInfo, cachePath)
+    }
+  } else {
+    searchAux := "+windows+kernel+vergilius+project"
+
+    url := GoogleKernelSearch(search, searchAux)
+  
     if url == ""{
       utils.Warning("Unable to find this Windows Kernel structure.")
     }
-
+  
     kernelInfo := parseKernelInfo(url)
-
-    cache.RunKernelCache(search, kernelInfo, cachePath)
+    
+    utils.GenericPrint(kernelInfo)
   }
 }

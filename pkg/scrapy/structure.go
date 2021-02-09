@@ -69,16 +69,31 @@ func ParseMSDNStructure(url string) *utils.API{
 }
 
 func RunStructureScraper(search, cachePath string){
-  if(!cache.CheckCache(search, cachePath)){
-  searchAux := "+structure+msdn"
-    url := GoogleMSDNSearch(search, searchAux)
+  if(cachePath != ""){
+    if(!cache.CheckCache(search, cachePath)){
+      searchAux := "+structure+msdn"
 
+      url := GoogleMSDNSearch(search, searchAux)
+    
+      if url == ""{
+        utils.Warning("Unable to find this Windows structure.")
+      }
+    
+      api := ParseMSDNStructure(url)
+
+      cache.RunStructureCache(search, cachePath, api)
+    }
+  } else {
+    searchAux := "+structure+msdn"
+
+    url := GoogleMSDNSearch(search, searchAux)
+  
     if url == ""{
       utils.Warning("Unable to find this Windows structure.")
     }
-
+  
     api := ParseMSDNStructure(url)
-
-    cache.RunStructureCache(search, cachePath, api)
+    
+    utils.PrintMSDNStructure(api)
   }
 }
