@@ -1,6 +1,6 @@
 # manw
 
-manw is a very simple and fast command line search engine for Windows API info written in Go.
+manw is a very simple and fast command line search engine for Windows API written in Go.
 
 ## Why?
 
@@ -163,6 +163,10 @@ Used in_SECURITY_CLIENT_CONTEXT
 * -a renamed to -f.
 * Fix flag number checking in order to allow only a single flag usage.
 * General code updates.
+
+## :warning: **Warning**
+
+The scraper relies on the way the pages used by the project (e.g. google, MSDN, etc) are implemented so keep in mind that if it changes the search might not work. That being said always keep your manw up-to-date and please let me know if you find any issue.
 
 ## **Known Issues**
 
