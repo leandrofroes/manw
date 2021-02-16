@@ -20,18 +20,17 @@ func GoogleMSDNSearch(search, searchAux string) string{
   )
 
   collector.OnHTML("html", func(e *colly.HTMLElement){
-    sellector := e.DOM.Find("div.g")
+    sellector := e.DOM.Find("a")
     for node := range sellector.Nodes{
       item := sellector.Eq(node)
-      linkTag := item.Find("a")
-      link, _ := linkTag.Attr("href")
-      link = strings.Trim(link, " ")
+      link, _ := item.Attr("href")
 
       re, err := regexp.Compile("https://docs.microsoft.com/en-us/windows+")
       utils.CheckError(err)
 
-      if link != "" && link != "#" && re.MatchString(link) {
-        result = link
+      if(re.MatchString(link)) {
+        tmpUrl := strings.Split(link, "=")[5]
+        result = strings.Split(tmpUrl, "&")[0]
         return
       }
     }
