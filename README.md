@@ -1,6 +1,6 @@
 # manw
 
-manw is a very simple and fast command line search engine for Windows OS info written in Go.
+manw is a very simple and fast command line search engine for Windows API info written in Go.
 
 ## Why?
 
@@ -163,6 +163,10 @@ Used in_SECURITY_CLIENT_CONTEXT
 * -a renamed to -f.
 * Fix flag number checking in order to allow only a single flag usage.
 * General code updates.
+
+## **Known Issues**
+
+* Kernel info search is not working properly due to the way the old google search function works. It's being improved and a fix will be released soon.
 
 ## **Special Thanks**
 
