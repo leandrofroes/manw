@@ -52,27 +52,27 @@ func GoogleKernelSearch(search, searchAux string) string{
     search = "_" + search
   }
 
-  url := baseUrl + search + searchAux
+  url := baseUrl + strings.ToUpper(search) + searchAux
 
   var result string
 
   collector := colly.NewCollector(
     colly.UserAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0"),
+    colly.DetectCharset(),
   )
 
   collector.OnHTML("html", func(e *colly.HTMLElement){
-    sellector := e.DOM.Find("div.g")
+    sellector := e.DOM.Find("a")
     for node := range sellector.Nodes{
       item := sellector.Eq(node)
-      linkTag := item.Find("a")
-      link, _ := linkTag.Attr("href")
-      link = strings.Trim(link, " ")
+      link, _ := item.Attr("href")
 
-      re, err := regexp.Compile("https://www.vergiliusproject.com/kernels+")
+      re, err := regexp.Compile("https://www.nirsoft.net/kernel_struct/+")
       utils.CheckError(err)
 
-      if link != "" && link != "#" && re.MatchString(link) {
-        result = link
+      if(re.MatchString(link)) {
+        tmpUrl := strings.Split(link, "=")[5]
+        result = strings.Split(tmpUrl, "&")[0]
         return
       }
     }

@@ -14,12 +14,9 @@ func parseKernelInfo(url string) string{
     colly.UserAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0"),
   )
 
-  collector.OnHTML("div", func(e *colly.HTMLElement){
-    if(e.Attr("id") == "copyblock"){
-      kernelInfo += e.Text
-    }
-    if(e.Attr("class") == "maincross"){
-      kernelInfo += "\n" + e.Text + "\n\n"
+  collector.OnHTML("pre", func(e *colly.HTMLElement){
+    if(e.Attr("class") == "kernelstruct"){
+      kernelInfo = e.Text
     }
   })
 
@@ -35,7 +32,7 @@ func parseKernelInfo(url string) string{
 func RunKernelScraper(search, cachePath string){
   if(cachePath != ""){
     if(!cache.CheckCache(search, cachePath)){
-      searchAux := "+windows+kernel+vergilius+project"
+      searchAux := "+kernel+struct+nirsoft"
 
       url := GoogleKernelSearch(search, searchAux)
     
@@ -48,7 +45,7 @@ func RunKernelScraper(search, cachePath string){
       cache.RunKernelCache(search, kernelInfo, cachePath)
     }
   } else {
-    searchAux := "+windows+kernel+vergilius+project"
+    searchAux := "+kernel+struct+nirsoft"
 
     url := GoogleKernelSearch(search, searchAux)
   
