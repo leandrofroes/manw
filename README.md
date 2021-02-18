@@ -37,7 +37,7 @@ OPTIONS:
 ## **Examples**
 
 ```
-$ ./manw -f createprocess
+$ ./manw -f createprocess 
 CreateProcessA function (processthreadsapi.h) - Win32 apps
 
 Exported by: Kernel32.dll
@@ -68,7 +68,7 @@ Source: https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-
 ```
 
 ```
-$ ./manw -s peb
+$ ./manw -s peb -c
 PEB (winternl.h) - Win32 apps
 
 Contains process information.
@@ -122,16 +122,13 @@ The calling convention for callback functions. This type is declared in WinDef.h
 
 ```
 $ ./manw -k _token_control
-//0x28 bytes (sizeof)
-struct _TOKEN_CONTROL
+typedef struct _TOKEN_CONTROL
 {
-    struct _LUID TokenId;                                                   //0x0
-    struct _LUID AuthenticationId;                                          //0x8
-    struct _LUID ModifiedId;                                                //0x10
-    struct _TOKEN_SOURCE TokenSource;                                       //0x18
-}; 
-
-Used in_SECURITY_CLIENT_CONTEXT
+     LUID TokenId;
+     LUID AuthenticationId;
+     LUID ModifiedId;
+     TOKEN_SOURCE TokenSource;
+} TOKEN_CONTROL, *PTOKEN_CONTROL;
 
 ```
 
@@ -170,7 +167,7 @@ The scraper relies on the way the pages used by the project (e.g. google, MSDN, 
 
 ## **Known Issues**
 
-* Kernel info search is not working properly due to the way the old google search function works. It's being improved and a fix will be released soon.
+* Currently the kernel struct info search supports Windows Vista 32bits kernel only. I do have plans to support other versions in the future.
 
 ## **Special Thanks**
 
