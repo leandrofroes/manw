@@ -13,7 +13,7 @@ import (
 func main(){
   usage := `NAME
 
-  manw - A multiplatform command line search engine for Windows OS info.
+  manw - A multiplatform command line search engine for Windows API.
 
 SYNOPSIS: 
 
