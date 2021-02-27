@@ -4,6 +4,7 @@ import (
   "log"
   "fmt"
   "io/ioutil"
+  "strings"
 )
 
 type API struct {
@@ -68,4 +69,25 @@ func PrintMSDNStructure(api *API){
   }
 
   fmt.Printf("Source: " + api.Source + "\n\n")
+}
+
+func PrintSyscallJson(data *map[string]interface{}, search string){
+  for k, v := range *data {
+    if(strings.HasPrefix(k, "Windows")){
+      fmt.Printf("%s\n", k)
+    } else if(!strings.Contains(k, "Nt")){
+      fmt.Printf("\t- %s: ", k)
+    }
+    if(strings.ToLower(k) == strings.ToLower(search)){
+      switch v.(type){
+        case float64:
+          fmt.Printf("%2.f\n", v)
+      }
+    }
+    switch v.(type) {
+      case map[string]interface{}:
+        tmp := v.(map[string]interface{})
+        PrintSyscallJson(&tmp, search)
+    }
+  }
 }

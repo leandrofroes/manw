@@ -4,7 +4,7 @@ import (
   "os"
   "strings"
 
-  "manw/pkg/utils"
+  "github.com/leandrofroes/manw/pkg/utils"
 )
 
 func Load() (cachePath string){

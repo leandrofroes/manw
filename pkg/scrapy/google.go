@@ -5,7 +5,8 @@ import (
   "regexp"
   "strings"
 
-  "manw/pkg/utils"
+  "github.com/leandrofroes/manw/pkg/utils"
+  
   "github.com/gocolly/colly"
 )
 

@@ -8,18 +8,28 @@ On Linux systems we are able to search for the documentation of a function using
 
 ## **Installation**
 
+You can either download the latest version from the [releases](https://github.com/leandrofroes/manw/releases) page or build it manually:
+
 ```
 git clone https://github.com/leandrofroes/manw
 cd manw
 make
 ```
 
+OR
+
+```
+go get https://github.com/leandrofroes/manw
+```
+
+NOTE: Tested on Linux and Windows.
+
 ## **Usage**
 
 ```
 NAME
 
-  manw - A multiplatform command line search engine for Windows OS info.
+  manw - A multiplatform command line search engine for Windows API.
   
 SYNOPSIS: 
 
@@ -31,13 +41,15 @@ OPTIONS:
   -s, --structure string  Search for a Windows API Structure.    
   -k, --kernel    string  Search for a Windows Kernel Structure.
   -t, --type      string  Search for a Windows Data Type.
-  -c, --cache     bool    Enable cache feature.
+  -a, --arch      string  Specify the architecture you are looking for.
+  -n, --syscall   string  Search for a Windows Syscall ID. If you don't use -a the default value is "x86".
+  -c, --no-cache  bool    Disable the caching feature.
 ```
 
 ## **Examples**
 
 ```
-$ ./manw -f createprocess 
+$ ./manw -f createprocess
 CreateProcessA function (processthreadsapi.h) - Win32 apps
 
 Exported by: Kernel32.dll
@@ -68,7 +80,7 @@ Source: https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-
 ```
 
 ```
-$ ./manw -s peb -c
+$ ./manw -s peb
 PEB (winternl.h) - Win32 apps
 
 Contains process information.
@@ -122,15 +134,63 @@ The calling convention for callback functions. This type is declared in WinDef.h
 
 ```
 $ ./manw -k _token_control
-typedef struct _TOKEN_CONTROL
+//0x28 bytes (sizeof)
+struct _TOKEN_CONTROL
 {
-     LUID TokenId;
-     LUID AuthenticationId;
-     LUID ModifiedId;
-     TOKEN_SOURCE TokenSource;
-} TOKEN_CONTROL, *PTOKEN_CONTROL;
+    struct _LUID TokenId;                                                   //0x0
+    struct _LUID AuthenticationId;                                          //0x8
+    struct _LUID ModifiedId;                                                //0x10
+    struct _TOKEN_SOURCE TokenSource;                                       //0x18
+}; 
+
+Used in_SECURITY_CLIENT_CONTEXT
 
 ```
+
+```
+$ ./manw -n NtAllocateVirtualMemory -a x64
+Windows 7
+	- SP0: 21
+	- SP1: 21
+Windows Server 2012
+	- SP0: 22
+	- R2: 23
+Windows 8
+	- 8.1: 23
+	- 8.0: 22
+Windows 10
+	- 1803: 24
+	- 1809: 24
+	- 1903: 24
+	- 1909: 24
+	- 1507: 24
+	- 1703: 24
+	- 1709: 24
+	- 2004: 24
+	- 20H2: 24
+	- 1511: 24
+	- 1607: 24
+Windows XP
+	- SP1: 21
+	- SP2: 21
+Windows Server 2003
+	- R2 SP2: 21
+	- SP0: 21
+	- SP2: 21
+	- R2: 21
+Windows Vista
+	- SP0: 21
+	- SP1: 21
+	- SP2: 21
+Windows Server 2008
+	- SP0: 21
+	- SP2: 21
+	- R2: 21
+	- R2 SP1: 21
+
+```
+
+If no parameter is specified manw is going to use -f flag by default.
 
 ## **Version 1.0**:
 
@@ -161,13 +221,25 @@ typedef struct _TOKEN_CONTROL
 * Fix flag number checking in order to allow only a single flag usage.
 * General code updates.
 
+## **Version 2.0**:
+
+* Update Google search to meet with the new google page format.
+* Improve Google search to be generic and to avoid declare a new one for each scrapy function.
+* Add Windows Syscall ID searching through -n flag.
+* Add -a flag to specify the architecture along with -n flag. If you use -n with no architecture flag the default value is x86.
+* Add -c flag to disable caching feature.
+* Change module usage to use go get.
+* General code improvement and bug fixing.
+
 ## :warning: **Warning**
 
 The scraper relies on the way the pages used by the project (e.g. google, MSDN, etc) are implemented so keep in mind that if it changes the search might not work. That being said always keep your manw up-to-date and please let me know if you find any issue.
 
-## **Known Issues**
+## **Known issues:**
 
+* Data type search might show a very weird output depending the data you search.
 * Currently the kernel struct info search supports Windows Vista 32bits kernel only. I do have plans to support other versions in the future.
+* I'm also always trying to improve the code (e.g. performance, best practices, etc.) since I started it as a study project.
 
 ## **Special Thanks**
 

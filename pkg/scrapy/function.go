@@ -5,8 +5,9 @@ import (
   "regexp"
   "strings"
 
-  "manw/pkg/utils"
-  "manw/pkg/cache"
+  "github.com/leandrofroes/manw/pkg/utils"
+  "github.com/leandrofroes/manw/pkg/cache"
+  
   "github.com/gocolly/colly"
 )
 
@@ -74,7 +75,7 @@ func ParseMSDNFunction(url string) *utils.API{
 func RunFunctionScraper(search, cachePath string){
   if(cachePath != ""){
     if(!cache.CheckCache(search, cachePath)){
-      searchAux := "+function+msdn"
+      searchAux := "+api+function+msdn"
     
       url := GoogleMSDNSearch(search, searchAux)
     
