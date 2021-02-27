@@ -11,7 +11,7 @@ On Linux systems we are able to search for the documentation of a function using
 You can either download the latest version from the [releases](https://github.com/leandrofroes/manw/releases) page or build it manually:
 
 ```
-git clone https://github.com/leandrofroes/manw
+git clone https://github.com/leandrofroes/manw.git
 cd manw
 make
 ```
@@ -19,7 +19,7 @@ make
 OR
 
 ```
-go get https://github.com/leandrofroes/manw
+go get github.com/leandrofroes/manw
 ```
 
 NOTE: Tested on Linux and Windows.
