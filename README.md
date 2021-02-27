@@ -129,7 +129,6 @@ $ ./manw -t callback
 Data Type: CALLBACK
 
 The calling convention for callback functions. This type is declared in WinDef.h as follows: #define CALLBACK __stdcall CALLBACK, WINAPI, and APIENTRY are all used to define functions with the __stdcall calling convention. Most functions in the Windows API are declared using WINAPI. You may wish to use CALLBACK for the callback functions that you implement to help identify the function as a callback function.
-
 ```
 
 ```
@@ -189,7 +188,7 @@ Windows Server 2008
 	- R2 SP1: 21
 ```
 
-If no parameter is specified manw is going to use -f flag by default.
+If no flag is specified manw is going to use -f flag by default.
 
 ## :warning: **Warning**
 
