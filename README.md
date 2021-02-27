@@ -22,7 +22,7 @@ OR
 go get github.com/leandrofroes/manw
 ```
 
-NOTE: Tested on Linux and Windows.
+NOTE: Tested on Linux and Windows. For more information about the version please check the release notes.
 
 ## **Usage**
 
@@ -187,49 +187,9 @@ Windows Server 2008
 	- SP2: 21
 	- R2: 21
 	- R2 SP1: 21
-
 ```
 
 If no parameter is specified manw is going to use -f flag by default.
-
-## **Version 1.0**:
-
-* DLL dependency added to Windows API module.
-* New Command Line flags support.
-* New Caching feature for offline usage.
-* New Windows Data Type search module.
-* New Windows Kernel Structure search module.
-* Now the project is modular.
-
-## **Version 1.1**:
-
-* Fix v0.1 compatibility. If no parameter is passed manw is going to run the API Search module by default.
-* Remove caching path configuration requirement. Now the caching path is created by manw itself.
-* Now both Kernel Structure and Data Type module supports caching feature.
-* Some other code improvements.
-
-## **Version 1.2**:
-
-* General bug fix
-* Now the cache directory is created only if you specify the -c flag
-
-## **Version 1.3**:
-
-* Now the cache feature is enabled by default and -c flag was removed.
-* New -s flag for Windows API Structure search.
-* -a renamed to -f.
-* Fix flag number checking in order to allow only a single flag usage.
-* General code updates.
-
-## **Version 2.0**:
-
-* Update Google search to meet with the new google page format.
-* Improve Google search to be generic and to avoid declare a new one for each scrapy function.
-* Add Windows Syscall ID searching through -n flag.
-* Add -a flag to specify the architecture along with -n flag. If you use -n with no architecture flag the default value is x86.
-* Add -c flag to disable caching feature.
-* Change module usage to use go get.
-* General code improvement and bug fixing.
 
 ## :warning: **Warning**
 
