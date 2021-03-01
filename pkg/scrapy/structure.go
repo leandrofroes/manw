@@ -11,7 +11,7 @@ import (
   "github.com/gocolly/colly"
 )
 
-func ParseMSDNStructure(url string) *utils.API{
+func ParseMSDNStructure(search, url string) *utils.API{
   api := utils.API{}
 
   collector := colly.NewCollector(
@@ -21,6 +21,12 @@ func ParseMSDNStructure(url string) *utils.API{
 
   collector.OnHTML("meta", func(e *colly.HTMLElement){
     if e.Attr("property") == "og:title"{
+      strucTitle := strings.Split(strings.ToLower(e.Attr("content")), " ")[0]
+
+      if(!strings.Contains(strucTitle, search)){
+        utils.Warning("Unable to find this Windows structure.")
+      }
+      
       api.Title = e.Attr("content")
       return
     }
@@ -70,6 +76,8 @@ func ParseMSDNStructure(url string) *utils.API{
 }
 
 func RunStructureScraper(search, cachePath string){
+  search = strings.ToLower(search)
+
   if(cachePath != ""){
     if(!cache.CheckCache(search, cachePath)){
       searchAux := "+structure+msdn"
@@ -80,7 +88,7 @@ func RunStructureScraper(search, cachePath string){
         utils.Warning("Unable to find this Windows structure.")
       }
     
-      api := ParseMSDNStructure(url)
+      api := ParseMSDNStructure(search, url)
 
       cache.RunStructureCache(search, cachePath, api)
     }
@@ -93,8 +101,8 @@ func RunStructureScraper(search, cachePath string){
       utils.Warning("Unable to find this Windows structure.")
     }
   
-    api := ParseMSDNStructure(url)
-    
+    api := ParseMSDNStructure(search, url)
+
     utils.PrintMSDNStructure(api)
   }
 }

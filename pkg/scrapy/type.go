@@ -11,7 +11,7 @@ import(
   "github.com/gocolly/colly"
 )
 
-func parseMSDNDataType(s, url string) string{
+func parseMSDNDataType(search, url string) string{
   var dataTypeInfo string
   collector := colly.NewCollector(
     colly.AllowedDomains("docs.microsoft.com"),
@@ -19,7 +19,7 @@ func parseMSDNDataType(s, url string) string{
   )
 
   collector.OnHTML("tr", func(e *colly.HTMLElement){
-    str := strings.ToUpper(s) + "\n"
+    str := strings.ToUpper(search) + "\n"
     re, err := regexp.Compile(str)
     utils.CheckError(err)
     match := re.FindString(e.Text)
@@ -46,6 +46,8 @@ func parseMSDNDataType(s, url string) string{
 }
 
 func RunTypeScraper(search, cachePath string){
+  search = strings.ToLower(search)
+
   if(cachePath != ""){
     if(!cache.CheckCache(search, cachePath)){
       searchAux := "+windows+data+type+msdn"
@@ -57,6 +59,10 @@ func RunTypeScraper(search, cachePath string){
       }
     
       dataTypeInfo := parseMSDNDataType(search, url)
+
+      if(dataTypeInfo == ""){
+        utils.Warning("Unable to find this Windows data type.")
+      }
 
       cache.RunTypeCache(search, dataTypeInfo, cachePath)
     }
@@ -71,6 +77,10 @@ func RunTypeScraper(search, cachePath string){
   
     dataTypeInfo := parseMSDNDataType(search, url)
     
+    if(dataTypeInfo == ""){
+      utils.Warning("Unable to find this Windows data type.")
+    }
+
     utils.GenericPrint(dataTypeInfo)
   }
 }

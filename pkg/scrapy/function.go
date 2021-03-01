@@ -11,7 +11,7 @@ import (
   "github.com/gocolly/colly"
 )
 
-func ParseMSDNFunction(url string) *utils.API{
+func ParseMSDNFunction(search, url string) *utils.API{
   api := utils.API{}
 
   collector := colly.NewCollector(
@@ -21,6 +21,12 @@ func ParseMSDNFunction(url string) *utils.API{
 
   collector.OnHTML("meta", func(e *colly.HTMLElement){
     if e.Attr("property") == "og:title"{
+      funcTitle := strings.Split(strings.ToLower(e.Attr("content")), " ")[0]
+
+      if(!strings.Contains(funcTitle, search)){
+        utils.Warning("Unable to find this Windows function.")
+      }
+
       api.Title = e.Attr("content")
       return
     }
@@ -73,6 +79,8 @@ func ParseMSDNFunction(url string) *utils.API{
 }
 
 func RunFunctionScraper(search, cachePath string){
+  search = strings.ToLower(search)
+
   if(cachePath != ""){
     if(!cache.CheckCache(search, cachePath)){
       searchAux := "+api+function+msdn"
@@ -83,7 +91,7 @@ func RunFunctionScraper(search, cachePath string){
         utils.Warning("Unable to find this Windows function.")
       }
     
-      api := ParseMSDNFunction(url)
+      api := ParseMSDNFunction(search, url)
       
       cache.RunFunctionCache(search, cachePath, api)
     } 
@@ -96,7 +104,7 @@ func RunFunctionScraper(search, cachePath string){
       utils.Warning("Unable to find this Windows function.")
     }
   
-    api := ParseMSDNFunction(url)
+    api := ParseMSDNFunction(search, url)
 
     utils.PrintMSDNFunc(api)
   }

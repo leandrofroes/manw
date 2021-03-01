@@ -5,6 +5,7 @@ import(
   "net/http"
   "io/ioutil"
   "strings"
+  "regexp"
 
   "github.com/leandrofroes/manw/pkg/utils"
   "github.com/leandrofroes/manw/pkg/cache"
@@ -19,7 +20,11 @@ func parseSyscallRepo(search, url string) map[string]interface{}{
   body, err := ioutil.ReadAll(r.Body)
   utils.CheckError(err)
 
-  if(!strings.Contains(string(body), search)){
+  re, err := regexp.Compile("\"+" + search + "\":")
+  utils.CheckError(err)
+  match := re.FindString(strings.ToLower(string(body)))
+
+  if(match == ""){
     utils.Warning("Unable to find this Windows Syscall ID.")
   }
 
@@ -31,6 +36,8 @@ func parseSyscallRepo(search, url string) map[string]interface{}{
 
 func RunSyscallScraper(search, arch, cachePath string){
   var url string
+
+  search = strings.ToLower(search)
 
   if(arch == "x64" || arch == "amd64" || arch == "x86_64" ){
     url = "https://raw.githubusercontent.com/j00ru/windows-syscalls/master/x64/json/nt-per-system.json"
