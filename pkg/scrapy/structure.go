@@ -23,7 +23,7 @@ func ParseMSDNStructure(search, url string) *utils.API{
     if e.Attr("property") == "og:title"{
       strucTitle := strings.Split(strings.ToLower(e.Attr("content")), " ")[0]
 
-      if(!strings.Contains(strucTitle, search)){
+      if !strings.Contains(strucTitle, search){
         utils.Warning("Unable to find this Windows structure.")
       }
       
@@ -78,8 +78,8 @@ func ParseMSDNStructure(search, url string) *utils.API{
 func RunStructureScraper(search, cachePath string){
   search = strings.ToLower(search)
 
-  if(cachePath != ""){
-    if(!cache.CheckCache(search, cachePath)){
+  if cachePath != ""{
+    if !cache.CheckCache(search, cachePath){
       searchAux := "+structure+msdn"
 
       url := GoogleMSDNSearch(search, searchAux)

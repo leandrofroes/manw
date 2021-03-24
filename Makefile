@@ -5,7 +5,7 @@ GOCMD=go
 all: build
 
 build: 
-	$(GOCMD) build manw
+	$(GOCMD) build
 
 clean:
 	rm -f manw

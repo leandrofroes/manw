@@ -16,7 +16,11 @@ func addFunctionCache(search, cachePath string, api *utils.API) (entry string){
   utils.CheckError(err)
 
   f.WriteString(api.Title + "\n\n")
-  f.WriteString("Exported by: " + api.DLL + "\n\n")
+
+  if api.DLL != ""{
+    f.WriteString("Exported by: " + api.DLL + "\n\n")
+  }
+
   f.WriteString(api.Description + "\n\n")
   f.WriteString(api.CodeA + "\n")
 
@@ -58,12 +62,12 @@ func addStructureCache(search, cachePath string, api *utils.API) (entry string){
 
 func parseSyscallJson(data *map[string]interface{}, search string, f *os.File){
   for k, v := range *data {
-    if(strings.HasPrefix(k, "Windows")){
+    if strings.HasPrefix(k, "Windows"){
       f.WriteString(k + "\n")
-    } else if(!strings.Contains(k, "Nt")){
+    } else if !strings.Contains(k, "Nt"){
       f.WriteString("\t- " + k + ": ")
     }
-    if(strings.ToLower(k) == strings.ToLower(search)){
+    if strings.ToLower(k) == strings.ToLower(search){
       switch v.(type){
         case float64:
           s := fmt.Sprintf("%2.f\n", v)

@@ -69,7 +69,7 @@ BOOL CreateProcessA(
   LPPROCESS_INFORMATION lpProcessInformation
 );
 
-Return value: If the function succeeds, the return value is nonzero. If the function fails, the return value is zero. Note that the function returns before the process has finished initialization. If a required DLL cannot be located or fails to initialize, the process is terminated. 
+Return value: If the function succeeds, the return value is nonzero. If the function fails, the return value is zero.
 
 Example code:
 

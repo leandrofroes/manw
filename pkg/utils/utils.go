@@ -19,7 +19,7 @@ type API struct {
 }
 
 func CheckError(err error){
-  if(err != nil){
+  if err != nil{
     log.Fatal(err)
   }
 }
@@ -40,7 +40,11 @@ func GenericPrint(data string){
 
 func PrintMSDNFunc(api *API){
   fmt.Printf(api.Title + "\n\n")
-  fmt.Printf("Exported by: " + api.DLL + "\n\n")
+
+  if api.DLL != ""{
+    fmt.Printf("Exported by: " + api.DLL + "\n\n")
+  }
+
   fmt.Printf(api.Description + "\n\n")
   fmt.Printf(api.CodeA + "\n")
 
@@ -73,12 +77,12 @@ func PrintMSDNStructure(api *API){
 
 func PrintSyscallJson(data *map[string]interface{}, search string){
   for k, v := range *data {
-    if(strings.HasPrefix(k, "Windows")){
+    if strings.HasPrefix(k, "Windows"){
       fmt.Printf("%s\n", k)
-    } else if(!strings.Contains(k, "Nt")){
+    } else if !strings.Contains(k, "Nt"){
       fmt.Printf("\t- %s: ", k)
     }
-    if(strings.ToLower(k) == strings.ToLower(search)){
+    if strings.ToLower(k) == strings.ToLower(search){
       switch v.(type){
         case float64:
           fmt.Printf("%2.f\n", v)

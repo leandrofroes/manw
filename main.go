@@ -55,14 +55,14 @@ OPTIONS:
 
   flag.Parse()
 
-  if(len(os.Args) < 2){
+  if len(os.Args) < 2{
     fmt.Fprintf(os.Stderr, usage)
     os.Exit(1)
   }
 
   var cachePath string
 
-  if(!cacheFlag){
+  if !cacheFlag{
     cachePath = config.Load()
   }
 

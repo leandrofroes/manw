@@ -29,7 +29,7 @@ func parseMSDNDataType(search, url string) string{
       strSlice := strings.Split(e.Text, "\n")
       dataTypeInfo += "\nData Type: "
       for i, str := range strSlice{
-        if(i > 0 && i < len(strSlice) -1){
+        if i > 0 && i < len(strSlice) - 1{
           dataTypeInfo += str + "\n\n"
         }
       }
@@ -48,8 +48,8 @@ func parseMSDNDataType(search, url string) string{
 func RunTypeScraper(search, cachePath string){
   search = strings.ToLower(search)
 
-  if(cachePath != ""){
-    if(!cache.CheckCache(search, cachePath)){
+  if cachePath != ""{
+    if !cache.CheckCache(search, cachePath){
       searchAux := "+windows+data+type+msdn"
 
       url := GoogleMSDNSearch(search, searchAux)
@@ -60,7 +60,7 @@ func RunTypeScraper(search, cachePath string){
     
       dataTypeInfo := parseMSDNDataType(search, url)
 
-      if(dataTypeInfo == ""){
+      if dataTypeInfo == ""{
         utils.Warning("Unable to find this Windows data type.")
       }
 
@@ -77,7 +77,7 @@ func RunTypeScraper(search, cachePath string){
   
     dataTypeInfo := parseMSDNDataType(search, url)
     
-    if(dataTypeInfo == ""){
+    if dataTypeInfo == ""{
       utils.Warning("Unable to find this Windows data type.")
     }
 

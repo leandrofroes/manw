@@ -23,7 +23,7 @@ func ParseMSDNFunction(search, url string) *utils.API{
     if e.Attr("property") == "og:title"{
       funcTitle := strings.Split(strings.ToLower(e.Attr("content")), " ")[0]
 
-      if(!strings.Contains(funcTitle, search)){
+      if !strings.Contains(funcTitle, search){
         utils.Warning("Unable to find this Windows function.")
       }
 
@@ -42,8 +42,16 @@ func ParseMSDNFunction(search, url string) *utils.API{
 
   collector.OnHTML("meta", func(e *colly.HTMLElement){
     if e.Attr("name") == "req.dll"{
-      api.DLL = e.Attr("content")
-      return
+      if e.Attr("content") != ""{
+        api.DLL = e.Attr("content")
+        return
+      }
+    }
+    if e.Attr("name") == "APILocation"{
+      if strings.Contains(e.Attr("content"), ".dll"){
+        api.DLL = e.Attr("content")
+        return
+      }
     }
   })
 
@@ -59,12 +67,12 @@ func ParseMSDNFunction(search, url string) *utils.API{
   })
 
   collector.OnHTML("p", func(e *colly.HTMLElement){
-    re, err := regexp.Compile(".*(no error occurs|succeeds|fails|failure|returns|return value|returned).*(no error occurs|succeeds|fails|failure|returns|return value|returned)[^.]+")
+    re, err := regexp.Compile("^(If the function succeeds|The return value|Returns|This function does|If the function fails|If no error occurs)[^.]+.*[.]")
     utils.CheckError(err)
     match := re.FindString(e.Text)
-
+    
     if match != ""{
-      api.Return += match + ". "
+      api.Return += match
       api.Return = strings.ReplaceAll(api.Return, "\n", " ",)
     }
   })
@@ -81,8 +89,8 @@ func ParseMSDNFunction(search, url string) *utils.API{
 func RunFunctionScraper(search, cachePath string){
   search = strings.ToLower(search)
 
-  if(cachePath != ""){
-    if(!cache.CheckCache(search, cachePath)){
+  if cachePath != ""{
+    if !cache.CheckCache(search, cachePath){
       searchAux := "+api+function+msdn"
     
       url := GoogleMSDNSearch(search, searchAux)

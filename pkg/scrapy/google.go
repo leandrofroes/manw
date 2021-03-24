@@ -26,10 +26,10 @@ func GoogleMSDNSearch(search, searchAux string) string{
       item := sellector.Eq(node)
       link, _ := item.Attr("href")
 
-      re, err := regexp.Compile("https://docs.microsoft.com/en-us/windows+")
+      re, err := regexp.Compile("https://docs.microsoft.com/en-us/+")
       utils.CheckError(err)
 
-      if(re.MatchString(link)) {
+      if re.MatchString(link) {
         tmpUrl := strings.Split(link, "=")[5]
         result = strings.Split(tmpUrl, "&")[0]
         return
@@ -49,7 +49,7 @@ func GoogleMSDNSearch(search, searchAux string) string{
 func GoogleKernelSearch(search, searchAux string) string{
   baseUrl := "https://www.google.com/search?q="
 
-  if(!strings.HasPrefix(search, "_")){
+  if !strings.HasPrefix(search, "_"){
     search = "_" + search
   }
 
@@ -71,7 +71,7 @@ func GoogleKernelSearch(search, searchAux string) string{
       re, err := regexp.Compile("https://www.nirsoft.net/kernel_struct/+")
       utils.CheckError(err)
 
-      if(re.MatchString(link)) {
+      if re.MatchString(link) {
         tmpUrl := strings.Split(link, "=")[5]
         result = strings.Split(tmpUrl, "&")[0]
         return
