@@ -80,7 +80,7 @@ func RunStructureScraper(search, cachePath string){
 
   if cachePath != ""{
     if !cache.CheckCache(search, cachePath){
-      searchAux := "+structure+msdn"
+      searchAux := "+api+msdn"
 
       url := GoogleMSDNSearch(search, searchAux)
     
@@ -93,7 +93,7 @@ func RunStructureScraper(search, cachePath string){
       cache.RunStructureCache(search, cachePath, api)
     }
   } else {
-    searchAux := "+structure+msdn"
+    searchAux := "+api+msdn"
 
     url := GoogleMSDNSearch(search, searchAux)
   
