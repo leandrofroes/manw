@@ -4,7 +4,7 @@ manw is a very simple and fast command line search engine for Windows API writte
 
 ## Why?
 
-On Linux systems we are able to search for the documentation of a function using man command, but what about Windows? Open the browser and read the full documentation is always a good option  but sometimes the only thing we need is a high level overview and not the full documentation.
+Because open the browser sometimes take too much time.
 
 ## **Installation**
 
