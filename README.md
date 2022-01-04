@@ -4,7 +4,7 @@ manw is a very simple and fast command line search tool for Windows API written 
 
 ## Why?
 
-Because open the browser sometimes take too much time.
+Because sometimes open the browser takes too much time.
 
 ## **Installation**
 
