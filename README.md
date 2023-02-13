@@ -49,34 +49,37 @@ OPTIONS:
 ## **Examples**
 
 ```
-$ ./manw -f createprocess
-CreateProcessA function (processthreadsapi.h) - Win32 apps
+$ ./manw -f createprocessw
+CreateProcessW function (processthreadsapi.h) - Win32 apps
 
 Exported by: Kernel32.dll
 
-Creates a new process and its primary thread. The new process runs in the security context of the calling process.
+Number of arguments: 10
 
-BOOL CreateProcessA(
-  LPCSTR                lpApplicationName,
-  LPSTR                 lpCommandLine,
-  LPSECURITY_ATTRIBUTES lpProcessAttributes,
-  LPSECURITY_ATTRIBUTES lpThreadAttributes,
-  BOOL                  bInheritHandles,
-  DWORD                 dwCreationFlags,
-  LPVOID                lpEnvironment,
-  LPCSTR                lpCurrentDirectory,
-  LPSTARTUPINFOA        lpStartupInfo,
-  LPPROCESS_INFORMATION lpProcessInformation
+Creates a new process and its primary thread. The new process runs in the security context of the calling process. (Unicode)
+
+BOOL CreateProcessW(
+  [in, optional]      LPCWSTR               lpApplicationName,
+  [in, out, optional] LPWSTR                lpCommandLine,
+  [in, optional]      LPSECURITY_ATTRIBUTES lpProcessAttributes,
+  [in, optional]      LPSECURITY_ATTRIBUTES lpThreadAttributes,
+  [in]                BOOL                  bInheritHandles,
+  [in]                DWORD                 dwCreationFlags,
+  [in, optional]      LPVOID                lpEnvironment,
+  [in, optional]      LPCWSTR               lpCurrentDirectory,
+  [in]                LPSTARTUPINFOW        lpStartupInfo,
+  [out]               LPPROCESS_INFORMATION lpProcessInformation
 );
 
-Return value: If the function succeeds, the return value is nonzero. If the function fails, the return value is zero.
+Return value: If the function succeeds, the return value is nonzero.If the function fails, the return value is zero.
 
 Example code:
 
-	LPTSTR szCmdline = _tcsdup(TEXT("C:\\Program Files\\MyApp -L -S"));
-	CreateProcess(NULL, szCmdline, /* ... */);
+        LPTSTR szCmdline = _tcsdup(TEXT("C:\\Program Files\\MyApp -L -S"));
+        CreateProcess(NULL, szCmdline, /* ... */);
 
-Source: https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-createprocessa
+
+Source: https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-createprocessw
 ```
 
 ```
