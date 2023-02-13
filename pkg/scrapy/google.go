@@ -26,7 +26,7 @@ func GoogleMSDNSearch(search, searchAux string) string{
       item := sellector.Eq(node)
       link, _ := item.Attr("href")
 
-      re, err := regexp.Compile("https://docs.microsoft.com/en-us/+")
+      re, err := regexp.Compile(".microsoft.com/en-us/+")
       utils.CheckError(err)
 
       if re.MatchString(link) {

@@ -20,6 +20,8 @@ func addFunctionCache(search, cachePath string, api *utils.API) (entry string){
   if api.DLL != ""{
     f.WriteString("Exported by: " + api.DLL + "\n\n")
   }
+  
+  f.WriteString("Number of arguments: " + api.Argc + "\n\n")
 
   f.WriteString(api.Description + "\n\n")
   f.WriteString(api.CodeA + "\n")

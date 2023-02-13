@@ -16,6 +16,7 @@ type API struct {
   Return      string
   Source      string
   DLL         string
+  Argc        string
 }
 
 func CheckError(err error){
@@ -44,6 +45,8 @@ func PrintMSDNFunc(api *API){
   if api.DLL != ""{
     fmt.Printf("Exported by: " + api.DLL + "\n\n")
   }
+  
+  fmt.Printf("Number of arguments: " + api.Argc + "\n\n")
 
   fmt.Printf(api.Description + "\n\n")
   fmt.Printf(api.CodeA + "\n")

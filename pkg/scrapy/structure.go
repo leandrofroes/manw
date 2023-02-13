@@ -15,7 +15,6 @@ func ParseMSDNStructure(search, url string) *utils.API{
   api := utils.API{}
 
   collector := colly.NewCollector(
-    colly.AllowedDomains("docs.microsoft.com"),
     colly.UserAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0"),
   )
 
@@ -80,7 +79,7 @@ func RunStructureScraper(search, cachePath string){
 
   if cachePath != ""{
     if !cache.CheckCache(search, cachePath){
-      searchAux := "+api+msdn"
+      searchAux := "+msdn"
 
       url := GoogleMSDNSearch(search, searchAux)
     

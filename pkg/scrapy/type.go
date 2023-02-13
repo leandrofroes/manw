@@ -14,7 +14,6 @@ import(
 func parseMSDNDataType(search, url string) string{
   var dataTypeInfo string
   collector := colly.NewCollector(
-    colly.AllowedDomains("docs.microsoft.com"),
     colly.UserAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0"),
   )
 
@@ -53,7 +52,7 @@ func RunTypeScraper(search, cachePath string){
       searchAux := "+windows+data+type+msdn"
 
       url := GoogleMSDNSearch(search, searchAux)
-    
+
       if url == ""{
         utils.Warning("Unable to find this Windows data type.")
       }

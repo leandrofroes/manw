@@ -4,6 +4,7 @@ import (
   "log"
   "regexp"
   "strings"
+  "strconv"
 
   "github.com/leandrofroes/manw/pkg/utils"
   "github.com/leandrofroes/manw/pkg/cache"
@@ -15,7 +16,6 @@ func ParseMSDNFunction(search, url string) *utils.API{
   api := utils.API{}
 
   collector := colly.NewCollector(
-    colly.AllowedDomains("docs.microsoft.com"),
     colly.UserAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0"),
   )
 
@@ -58,6 +58,8 @@ func ParseMSDNFunction(search, url string) *utils.API{
   collector.OnHTML("pre", func(e *colly.HTMLElement){
     if e.Index == 0 {
       api.CodeA = e.Text
+      api.Argc = strconv.Itoa(len(strings.Split(e.Text, "\n")) - 3)
+
       return
     }
     if e.Index == 1{
@@ -91,10 +93,10 @@ func RunFunctionScraper(search, cachePath string){
 
   if cachePath != ""{
     if !cache.CheckCache(search, cachePath){
-      searchAux := "+api+function+msdn"
+      searchAux := "+function+msdn"
     
       url := GoogleMSDNSearch(search, searchAux)
-    
+
       if url == ""{
         utils.Warning("Unable to find this Windows function.")
       }
@@ -104,7 +106,7 @@ func RunFunctionScraper(search, cachePath string){
       cache.RunFunctionCache(search, cachePath, api)
     } 
   } else {
-    searchAux := "+api+function+msdn"
+    searchAux := "+function+msdn"
 
     url := GoogleMSDNSearch(search, searchAux)
   
