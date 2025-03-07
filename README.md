@@ -1,7 +1,3 @@
-# Update 07-03-2025
-
-It seems the Google search HTML changed (again) and manw is not working anymore. I'm still thinking if I'll archive this project or update it.
-
 # manw
 
 manw is a very simple and fast command line search tool for Windows API written in Go.
@@ -9,6 +5,10 @@ manw is a very simple and fast command line search tool for Windows API written 
 ## Why?
 
 Because sometimes open the browser takes too much time.
+
+# :warning: Update 07-03-2025
+
+It seems the Google search HTML changed (again) and manw is not working anymore. I'm still thinking if I'll archive this project or update it.
 
 ## **Installation**
 
